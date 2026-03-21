@@ -1,0 +1,37 @@
+{
+  "politics": [
+    "Should voting be mandatory in democratic countries?",
+    "What's the best way to address income inequality?",
+    "Should term limits exist for all political offices?",
+    "How can we improve civic engagement among young people?",
+    "What role should money play in political campaigns?"
+  ],
+  "sports": [
+    "Should professional athletes be considered role models?",
+    "What makes a great sports team leader?",
+    "How has technology changed the way we watch sports?",
+    "Should college athletes be paid?",
+    "What's more important: individual talent or team chemistry?"
+  ],
+  "hobbies": [
+    "How do hobbies contribute to work-life balance?",
+    "What makes a hobby worth pursuing?",
+    "Should schools teach more creative hobbies?",
+    "How do you balance multiple hobbies with limited time?",
+    "What hobby would you recommend to someone looking to reduce stress?"
+  ],
+  "work": [
+    "How should managers handle remote work expectations?",
+    "What's the best way to give constructive criticism?",
+    "Should companies prioritize work-life balance or productivity?",
+    "How do you handle a disagreement with your boss?",
+    "What makes a good company culture?"
+  ],
+  "empathy": [
+    "How do you comfort someone who's going through a difficult time?",
+    "What's the difference between sympathy and empathy?",
+    "How can you be empathetic without becoming emotionally exhausted?",
+    "Describe a time when someone showed you unexpected kindness.",
+    "How do you help someone who doesn't want to be helped?"
+  ]
+}
