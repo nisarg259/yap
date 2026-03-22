@@ -25,6 +25,9 @@ interface DimensionScore {
 
 interface ScoreData {
   overall: number
+  rawOverall?: number
+  durationSeconds?: number
+  durationFactor?: number
   dimensions: {
     fillerWords: DimensionScore
     repetition: DimensionScore
@@ -176,10 +179,10 @@ export default function SessionPage() {
         throw new Error(errorData.error || 'Transcription failed')
       }
 
-      const { transcript: transcriptText } = await transcribeResponse.json()
+      const { transcript: transcriptText, duration: speechDuration } = await transcribeResponse.json()
       setTranscript(transcriptText)
 
-      // Step 2: Score transcript
+      // Step 2: Score transcript (with duration for pro-rating)
       const scoreResponse = await fetch('/api/score', {
         method: 'POST',
         headers: {
@@ -189,6 +192,7 @@ export default function SessionPage() {
           transcript: transcriptText,
           category: currentPrompt.category,
           prompt: currentPrompt.text,
+          duration: speechDuration || 60,
         }),
       })
 
@@ -373,6 +377,14 @@ export default function SessionPage() {
                   </div>
                   <div className="ml-2 text-3xl text-zinc-500">/100</div>
                 </div>
+                {scoreData.durationSeconds !== undefined && scoreData.durationSeconds < 55 && (
+                  <p className="mt-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                    You spoke for {Math.round(scoreData.durationSeconds)}s of 60s
+                    {scoreData.rawOverall && scoreData.rawOverall !== scoreData.overall && (
+                      <span> (base score: {scoreData.rawOverall})</span>
+                    )}
+                  </p>
+                )}
               </CardContent>
             </Card>
 

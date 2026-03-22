@@ -6,6 +6,7 @@ interface ScoreRequest {
   transcript: string;
   category: string;
   prompt: string;
+  duration?: number; // Speech duration in seconds (max 60)
 }
 
 interface DimensionScore {
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     // Parse the JSON body
     const body: ScoreRequest = await request.json();
-    const { transcript, category, prompt } = body;
+    const { transcript, category, prompt, duration = 60 } = body;
 
     // Validate required fields
     if (!transcript || !category || !prompt) {
@@ -43,6 +44,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Calculate duration factor (pro-rate score based on speaking time)
+    // 60 seconds = 100%, 30 seconds = 70%, 15 seconds = 55%
+    const maxDuration = 60;
+    const normalizedDuration = Math.min(Math.max(duration, 0), maxDuration);
+    const durationFactor = 0.4 + (normalizedDuration / maxDuration) * 0.6;
 
     // Build the user prompt
     const userPrompt = buildScoringPrompt(category, prompt, transcript);
@@ -76,7 +83,17 @@ export async function POST(request: NextRequest) {
       throw new Error('Invalid response structure from OpenAI');
     }
 
-    return NextResponse.json(scoreData);
+    // Apply duration factor to overall score
+    const adjustedOverall = Math.round(scoreData.overall * durationFactor);
+
+    // Add duration info to response
+    return NextResponse.json({
+      ...scoreData,
+      overall: adjustedOverall,
+      rawOverall: scoreData.overall,
+      durationSeconds: normalizedDuration,
+      durationFactor: Math.round(durationFactor * 100),
+    });
   } catch (error) {
     console.error('Scoring error:', error);
 

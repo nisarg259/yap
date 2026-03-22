@@ -23,16 +23,17 @@ export async function POST(request: NextRequest) {
     const file = new File([audioFile], 'audio.webm', { type: audioFile.type });
 
     // Send to OpenAI Whisper API
-    // Use example-based prompt to encourage verbatim transcription (OpenAI recommended approach)
-    // Whisper tends to match the style of the prompt, so including filler words in examples helps
+    // Use verbose_json to get duration, and example-based prompt for filler words
     const transcription = await openai.audio.transcriptions.create({
       file: file,
       model: 'whisper-1',
+      response_format: 'verbose_json',
       prompt: "Umm, let me think like, hmm... Okay, here's what I'm, like, thinking. So, uh, you know, it's basically, um, I mean, actually, right, well, yeah, so basically...",
     });
 
     return NextResponse.json({
       transcript: transcription.text,
+      duration: transcription.duration || 0,
     });
   } catch (error) {
     console.error('Transcription error:', error);
