@@ -242,7 +242,7 @@ export default function SessionPage() {
           </Card>
         )}
 
-        {/* PROMPT Phase */}
+        {/* PROMPT Phase - prompt is hidden until user starts */}
         {phase === 'PROMPT' && prompt && (
           <div className="w-full space-y-6">
             <div className="text-center">
@@ -255,12 +255,12 @@ export default function SessionPage() {
             </div>
 
             <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="text-center text-xl">Your Prompt</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-2xl font-medium text-zinc-900 dark:text-zinc-50">
-                  {prompt.text}
+              <CardContent className="py-12">
+                <p className="text-center text-lg text-zinc-600 dark:text-zinc-400">
+                  Your prompt will be revealed when you start.
+                </p>
+                <p className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-500">
+                  You&apos;ll have 15 seconds to think before recording begins.
                 </p>
               </CardContent>
             </Card>
